@@ -12,6 +12,7 @@ LABEL "maintainer"="r0user"
 RUN apt update \
 	&& apt -y upgrade \
 	&& apt install -y hub \
+ 	&& apt install -y git \
 	&& apt autoremove \
 	&& apt autoclean \
 	&& apt clean
