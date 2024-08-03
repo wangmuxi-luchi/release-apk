@@ -13,6 +13,7 @@ RUN apt update \
 	&& apt -y upgrade \
 	&& apt install -y hub \
  	&& apt install -y git \
+  	&& apt install -y rename \
 	&& apt autoremove \
 	&& apt autoclean \
 	&& apt clean
