@@ -7,16 +7,16 @@ PROJECT_NAME=`grep -oP '"name": "\K(.*?)(?=")' ./package.json`
 if [ -f ./${APP_FOLDER}/build/outputs/apk/release/**.apk ]; then
     for f in ./${APP_FOLDER}/build/outputs/apk/release/**.apk; do
         STRING=${PROJECT_NAME}_${VERSION_NUMBER}_
-        echo $ENV{$STRING}
-        rename 's/app-/\Q$ENV{$STRING}\E/' $f
+        echo $STRING
+        rename 's/app-/'+$STRING+'/' $f
     done
   hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/**.apk -m "" v${VERSION_NUMBER}
 fi
 if [ -f ./${APP_FOLDER}/build/outputs/bundle/release/**.aab ]; then
 for f in ./${APP_FOLDER}/build/outputs/apk/release/**.aab; do
         STRING=${PROJECT_NAME}_${VERSION_NUMBER}_
-        echo $ENV{$STRING}
-        rename 's/app-/\Q$ENV{$STRING}\E/' $f
+        echo $STRING
+        rename 's/app-/'+$STRING+'/' $f
     done
   hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/release/**.aab -m "" v${VERSION_NUMBER}
 fi
