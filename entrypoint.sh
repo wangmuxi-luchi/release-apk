@@ -17,7 +17,6 @@ if [ -f ./${APP_FOLDER}/build/outputs/apk/release/**.apk ]; then
   hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/**.apk -m "" v${VERSION_NUMBER}
 fi
 if [ -f ./${APP_FOLDER}/build/outputs/bundle/release/**.aab ]; then
-for f in ./${APP_FOLDER}/build/outputs/bundle/release/**.aab; do
     #rename the 'app-' part with ${PROJECT_NAME}_${VERSION_NUMBER}_
     for f in ./${APP_FOLDER}/build/outputs/bundle/release/**.aab; do
         STRING=${PROJECT_NAME}_${VERSION_NUMBER}_
