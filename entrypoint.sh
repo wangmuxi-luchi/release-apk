@@ -1,8 +1,7 @@
 #!/bin/bash
 
 hub checkout ${GIT_REPO}
-ls -lah
-git config --global --add safe.directory ./github/workspace
+git config --global --add safe.directory /github/workspace
 VERSION_NUMBER=`grep -oP '"version": "\K(.*?)(?=")' ./package.json`
 PROJECT_NAME=`grep -oP '"name": "\K(.*?)(?=")' ./package.json`
 APK_FILES=(./${APP_FOLDER}/build/outputs/apk/release/**.apk)
@@ -12,8 +11,9 @@ if [ -f "${APK_FILES[0]}" ]; then
         STRING=${PROJECT_NAME}_${VERSION_NUMBER}_
         rename 's/app-/'"$STRING"'/' "$f"
     done
-    # Replace the - with _
-    for f in "${APK_FILES[@]}"; do
+    # Replace the - with _ in the changed file names
+    CHANGED_APK_FILES=(./${APP_FOLDER}/build/outputs/apk/release/**.apk)
+    for f in "${CHANGED_APK_FILES[@]}"; do
         rename 's/-/_/' "$f"
     done
     hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/*.apk -m "" v${VERSION_NUMBER}
@@ -26,8 +26,9 @@ if [ -f "${AAB_FILES[0]}" ]; then
         STRING=${PROJECT_NAME}_${VERSION_NUMBER}_
         rename 's/app-/'"$STRING"'/' "$f"
     done
-    # Replace the - with _
-    for f in "${AAB_FILES[@]}"; do
+    # Replace the - with _ in the changed file names
+    CHANGED_AAB_FILES=(./${APP_FOLDER}/build/outputs/bundle/release/**.aab)
+    for f in "${CHANGED_AAB_FILES[@]}"; do
         rename 's/-/_/' "$f"
     done
     hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/release/*.aab -m "" v${VERSION_NUMBER}
