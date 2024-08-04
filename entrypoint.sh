@@ -1,7 +1,8 @@
 #!/bin/bash
 
 hub checkout ${GIT_REPO}
-git config --global --add safe.directory /github/workspace
+cd ${GIT_REPO_NAME}
+git config --global --add safe.directory ./github/workspace
 VERSION_NUMBER=`grep -oP '"version": "\K(.*?)(?=")' ./package.json`
 PROJECT_NAME=`grep -oP '"name": "\K(.*?)(?=")' ./package.json`
 APK_FILES=(./${APP_FOLDER}/build/outputs/apk/release/*.apk)
