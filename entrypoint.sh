@@ -16,7 +16,7 @@ if [ -f "${APK_FILES[0]}" ]; then
     for f in "${CHANGED_APK_FILES[@]}"; do
         rename 's/-/_/' "$f"
     done
-    hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/*.apk -m "" v${VERSION_NUMBER}
+    hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/**.apk -m "" v${VERSION_NUMBER}
 fi
 
 AAB_FILES=(./${APP_FOLDER}/build/outputs/bundle/release/**.aab)
@@ -31,5 +31,5 @@ if [ -f "${AAB_FILES[0]}" ]; then
     for f in "${CHANGED_AAB_FILES[@]}"; do
         rename 's/-/_/' "$f"
     done
-    hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/release/*.aab -m "" v${VERSION_NUMBER}
+    hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/release/**.aab -m "" v${VERSION_NUMBER}
 fi
