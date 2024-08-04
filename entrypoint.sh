@@ -17,10 +17,10 @@ if [ -f "${APK_FILES[0]}" ]; then
         rename 's/-/_/' "$f"
     done
     if hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/**_signed.apk -m "" v${VERSION_NUMBER}; then
-        echo updated
+        echo added APK release
     else
         # if the release doesn't exist then create it
-        echo created
+        echo created APK release
         hub release create -a ./${APP_FOLDER}/build/outputs/apk/release/**_signed.apk -m "v${VERSION_NUMBER}" v${VERSION_NUMBER}
     fi
 fi
@@ -37,5 +37,10 @@ if [ -f "${AAB_FILES[0]}" ]; then
     for f in "${CHANGED_AAB_FILES[@]}"; do
         rename 's/-/_/' "$f"
     done
-    hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/release/**_signed.aab -m "" v${VERSION_NUMBER}
+    if hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/release/**_signed.aab -m "" v${VERSION_NUMBER}; then 
+        echo added AAB release
+    else
+        echo created AAB release
+        hub release create -a ./${APP_FOLDER}/build/outputs/bundle/release/**_signed.aab -m "v${VERSION_NUMBER}" v${VERSION_NUMBER}
+    fi
 fi
