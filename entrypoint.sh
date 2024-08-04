@@ -5,7 +5,7 @@ ls -lah
 git config --global --add safe.directory ./github/workspace
 VERSION_NUMBER=`grep -oP '"version": "\K(.*?)(?=")' ./package.json`
 PROJECT_NAME=`grep -oP '"name": "\K(.*?)(?=")' ./package.json`
-APK_FILES=(./${APP_FOLDER}/build/outputs/apk/release/*.apk)
+APK_FILES=(./${APP_FOLDER}/build/outputs/apk/release/**.apk)
 if [ -f "${APK_FILES[0]}" ]; then
     # Rename the 'app-' part with ${PROJECT_NAME}_${VERSION_NUMBER}_
     for f in "${APK_FILES[@]}"; do
@@ -19,7 +19,7 @@ if [ -f "${APK_FILES[0]}" ]; then
     hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/*.apk -m "" v${VERSION_NUMBER}
 fi
 
-AAB_FILES=(./${APP_FOLDER}/build/outputs/bundle/release/*.aab)
+AAB_FILES=(./${APP_FOLDER}/build/outputs/bundle/release/**.aab)
 if [ -f "${AAB_FILES[0]}" ]; then
     # Rename the 'app-' part with ${PROJECT_NAME}_${VERSION_NUMBER}_
     for f in "${AAB_FILES[@]}"; do
