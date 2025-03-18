@@ -2,8 +2,8 @@
 
 hub checkout ${GIT_REPO}
 git config --global --add safe.directory /github/workspace
-VERSION_NUMBER=$(grep -oP 'versionName "\K(.*?)(?=")' app/build.gradle.kts)
-PROJECT_NAME=$(grep -oP 'applicationId "\K(.*?)(?=")' app/build.gradle.kts)
+VERSION_NUMBER=$(grep -oP 'versionName "\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.kts)
+PROJECT_NAME=$(grep -oP 'applicationId "\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.kts)
 
 # VERSION_NUMBER=`grep -oP '"version": "\K(.*?)(?=")' ./package.json`
 # PROJECT_NAME=`grep -oP '"name": "\K(.*?)(?=")' ./package.json`
