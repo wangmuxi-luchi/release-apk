@@ -9,7 +9,7 @@ pwd
 
 # 输出当前目录下的文件和文件夹列表
 echo "当前目录下的文件和文件夹列表："
-ls -la ./${APP_FOLDER}/build/
+ls -la ./${APP_FOLDER}/
 
 VERSION_NUMBER=$(grep -oP 'versionName "\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.kts)
 PROJECT_NAME=$(grep -oP 'applicationId "\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.kts)
