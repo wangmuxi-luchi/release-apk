@@ -2,8 +2,8 @@
 
 hub checkout ${GIT_REPO}
 git config --global --add safe.directory /github/workspace
-VERSION_NUMBER=$(grep -oP 'versionName "\K(.*?)(?=")' app/build.gradle)
-PROJECT_NAME=$(grep -oP 'applicationId "\K(.*?)(?=")' app/build.gradle)
+VERSION_NUMBER=$(grep -oP 'versionName "\K(.*?)(?=")' app/build.gradle.kts)
+PROJECT_NAME=$(grep -oP 'applicationId "\K(.*?)(?=")' app/build.gradle.kts)
 
 # VERSION_NUMBER=`grep -oP '"version": "\K(.*?)(?=")' ./package.json`
 # PROJECT_NAME=`grep -oP '"name": "\K(.*?)(?=")' ./package.json`
@@ -29,12 +29,12 @@ if [ -f "${APK_FILES[0]}" ]; then
         echo "$file"
     done
 
-    if hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/**_signed.apk -m "" v${VERSION_NUMBER}; then
+    if hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/**_release.apk -m "" v${VERSION_NUMBER}; then
         echo added APK release
     else
         # if the release doesn't exist then create it
         echo created APK release
-        hub release create -a ./${APP_FOLDER}/build/outputs/apk/release/**_signed.apk -m "v${VERSION_NUMBER}" v${VERSION_NUMBER}
+        hub release create -a ./${APP_FOLDER}/build/outputs/apk/release/**_release.apk -m "v${VERSION_NUMBER}" v${VERSION_NUMBER}
     fi
 fi
 
@@ -50,10 +50,10 @@ if [ -f "${AAB_FILES[0]}" ]; then
     for f in "${CHANGED_AAB_FILES[@]}"; do
         rename 's/-/_/' "$f"
     done
-    if hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/release/**_signed.aab -m "" v${VERSION_NUMBER}; then 
+    if hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/release/**_release.aab -m "" v${VERSION_NUMBER}; then 
         echo added AAB release
     else
         echo created AAB release
-        hub release create -a ./${APP_FOLDER}/build/outputs/bundle/release/**_signed.aab -m "v${VERSION_NUMBER}" v${VERSION_NUMBER}
+        hub release create -a ./${APP_FOLDER}/build/outputs/bundle/release/**_release.aab -m "v${VERSION_NUMBER}" v${VERSION_NUMBER}
     fi
 fi
