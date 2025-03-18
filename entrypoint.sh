@@ -11,8 +11,8 @@ pwd
 echo "当前目录下的文件和文件夹列表："
 ls -la ./${APP_FOLDER}/
 
-VERSION_NUMBER=$(grep -oP 'versionName = "\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.kts)
-PROJECT_NAME=$(grep -oP 'applicationId = "\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.kts)
+VERSION_NUMBER=$(grep -oP 'versionName.*?"\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.kts)
+PROJECT_NAME=$(grep -oP 'applicationId.*?"\K(.*)(?=(\.))\.\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.kts)
 
 echo "版本号 (versionName): ${VERSION_NUMBER}"
 echo "项目名称 (applicationId): ${PROJECT_NAME}"
