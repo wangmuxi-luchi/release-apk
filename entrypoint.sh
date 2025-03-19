@@ -8,14 +8,24 @@ echo "当前工作目录路径："
 pwd
 
 # 输出环境变量
-echo ${GITHUB_REF}
+echo "输出环境变量GITHUB_REF：${GITHUB_REF}"
 
 # 输出当前目录下的文件和文件夹列表
 echo "当前目录下的文件和文件夹列表："
 ls -la ./${APP_FOLDER}/
 
 VERSION_NUMBER=$(grep -oP 'versionName.*?"\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.*)
-PROJECT_NAME=$(grep -oP 'applicationId.*?"\K(.*)(?=(\.))\.\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.*)
+
+# 检测projectname
+FILE_PATH = "./${APP_FOLDER}/build.gradle.*"
+if ls ${FILE_PATH} 1> /dev/null 2>&1; then
+    echo "文件存在："
+    ls ${FILE_PATH}
+    PROJECT_NAME=$(grep -oP 'applicationId.*?"\K(.*)(?=(\.))\.\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.*)
+else
+    echo "没有找到匹配的文件。"
+    PROJECT_NAME="APP"
+fi
 
 echo "版本号 (versionName): ${VERSION_NUMBER}"
 echo "项目名称 (applicationId): ${PROJECT_NAME}"
