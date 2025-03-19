@@ -8,7 +8,7 @@ pwd
 
 echo "输出环境变量GITHUB_REF：${GITHUB_REF}"
 
-echo "当前目录下的文件和文件夹列表："
+echo "当前目录${APP_FOLDER}文件夹下的文件和文件夹列表："
 ls -la ./${APP_FOLDER}/
 
 echo "设置release的版本号"
