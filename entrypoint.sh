@@ -3,18 +3,15 @@
 hub checkout ${GIT_REPO}
 git config --global --add safe.directory /github/workspace
 
-# 输出当前工作目录路径
 echo "当前工作目录路径："
 pwd
 
-# 输出环境变量
 echo "输出环境变量GITHUB_REF：${GITHUB_REF}"
 
-# 输出当前目录下的文件和文件夹列表
 echo "当前目录下的文件和文件夹列表："
 ls -la ./${APP_FOLDER}/
 
-// 设置release的版本号
+echo "设置release的版本号"
 if [[ "$GITHUB_REF" == refs/tags/* ]]; then
     echo "当前引用是一个标签（tag）: $GITHUB_REF"
     TAG_NAME=${GITHUB_REF#refs/tags/}  # 提取标签名称
