@@ -14,12 +14,22 @@ echo "输出环境变量GITHUB_REF：${GITHUB_REF}"
 echo "当前目录下的文件和文件夹列表："
 ls -la ./${APP_FOLDER}/
 
-VERSION_NUMBER=$(grep -oP 'versionName.*?"\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.*)
+// 设置release的版本号
+if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+    echo "当前引用是一个标签（tag）: $GITHUB_REF"
+    TAG_NAME=${GITHUB_REF#refs/tags/}  # 提取标签名称
+    echo "标签名称: $TAG_NAME"
+    VERSION_NUMBER=$TAG_NAME
+else
+    echo "当前引用不是一个标签（tag）: $GITHUB_REF"
+    VERSION_NUMBER=$(grep -oP 'versionName.*?"\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.*)
+fi
+
 
 # 检测projectname
-FILE_PATH = "./${APP_FOLDER}/build.gradle.*"
+FILE_PATH="./${APP_FOLDER}/build.gradle.*"
 if ls ${FILE_PATH} 1> /dev/null 2>&1; then
-    echo "文件存在："
+    echo "文件${FILE_PATH}存在"
     ls ${FILE_PATH}
     PROJECT_NAME=$(grep -oP 'applicationId.*?"\K(.*)(?=(\.))\.\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.*)
 else
