@@ -22,15 +22,14 @@ else
     VERSION_NUMBER=$(grep -oP 'versionName.*?"\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.*)
 fi
 
-
-# 检测projectname
 FILE_PATH="./${APP_FOLDER}/build.gradle.*"
+echo "在文件：${FILE_PATH}中检测项目名称 (applicationId)"
 if ls ${FILE_PATH} 1> /dev/null 2>&1; then
     echo "文件${FILE_PATH}存在"
     ls ${FILE_PATH}
     PROJECT_NAME=$(grep -oP 'applicationId.*?"\K(.*)(?=(\.))\.\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.*)
 else
-    echo "没有找到匹配的文件。"
+    echo "没有找到匹配的文件:${FILE_PATH}"
     PROJECT_NAME="APP"
 fi
 
