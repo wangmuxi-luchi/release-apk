@@ -22,6 +22,7 @@
 name: Build & Publish Release APK
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - '*'
@@ -33,15 +34,17 @@ jobs:
     - name: checkout code
       uses: actions/checkout@v2
     - name: setup jdk
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
-        java-version: 11
+        distribution: 'zulu'
+        java-version: '17'
+        java-package: jdk # optional (jdk or jre) - defaults to jdk
     - name: Make Gradle executable
       run: chmod +x ./gradlew
     - name: Build Release APK
-      run: ./gradlew assembleRelease
+      run: ./gradlew assembleRelease --stacktrace
     - name: Releasing using Hub
-      uses: sangatdesai/release-apk@main
+      uses:  wangmuxi-luchi/release-apk@main
       env:
        GITHUB_TOKEN: ${{ secrets.TOKEN }}
        APP_FOLDER: app
