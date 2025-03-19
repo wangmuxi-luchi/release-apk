@@ -7,12 +7,15 @@ git config --global --add safe.directory /github/workspace
 echo "当前工作目录路径："
 pwd
 
+# 输出环境变量
+echo ${GITHUB_REF}
+
 # 输出当前目录下的文件和文件夹列表
 echo "当前目录下的文件和文件夹列表："
 ls -la ./${APP_FOLDER}/
 
-VERSION_NUMBER=$(grep -oP 'versionName.*?"\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.kts)
-PROJECT_NAME=$(grep -oP 'applicationId.*?"\K(.*)(?=(\.))\.\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.kts)
+VERSION_NUMBER=$(grep -oP 'versionName.*?"\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.*)
+PROJECT_NAME=$(grep -oP 'applicationId.*?"\K(.*)(?=(\.))\.\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.*)
 
 echo "版本号 (versionName): ${VERSION_NUMBER}"
 echo "项目名称 (applicationId): ${PROJECT_NAME}"
