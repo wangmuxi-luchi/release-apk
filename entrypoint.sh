@@ -15,12 +15,13 @@ echo "设置release的版本号"
 if [[ "$GITHUB_REF" == refs/tags/* ]]; then
     echo "当前引用是一个标签（tag）: $GITHUB_REF"
     TAG_NAME=${GITHUB_REF#refs/tags/}  # 提取标签名称
-    echo "标签名称: $TAG_NAME"
+    # echo "标签名称: $TAG_NAME"
     # 使用正则表达式提取除了v以外的部分
-    VERSION_NUMBER=${TAG_NAME#v}
+    # TAG_NAME=${TAG_NAME#v}
 else
     echo "当前引用不是一个标签（tag）: $GITHUB_REF"
     VERSION_NUMBER=$(grep -oP 'versionName.*?"\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.*)
+    TAG_NAME="v${VERSION_NUMBER}"
 fi
 
 FILE_PATH="./${APP_FOLDER}/build.gradle.*"
@@ -34,10 +35,10 @@ else
     PROJECT_NAME="APP"
 fi
 
-echo "版本号 (versionName): ${VERSION_NUMBER}"
+echo "tag (tagName): ${TAG_NAME}"
 echo "项目名称 (applicationId): ${PROJECT_NAME}"
 
-# VERSION_NUMBER=`grep -oP '"version": "\K(.*?)(?=")' ./package.json`
+# TAG_NAME=`grep -oP '"version": "\K(.*?)(?=")' ./package.json`
 # PROJECT_NAME=`grep -oP '"name": "\K(.*?)(?=")' ./package.json`
 APK_FILES=(./${APP_FOLDER}/build/outputs/apk/release/**.apk)
 for file in ./${APP_FOLDER}/build/outputs/apk/release/*; do
@@ -45,9 +46,9 @@ for file in ./${APP_FOLDER}/build/outputs/apk/release/*; do
     echo "$file"
 done
 if [ -f "${APK_FILES[0]}" ]; then
-    # Rename the 'app-' part with ${PROJECT_NAME}_${VERSION_NUMBER}_
+    # Rename the 'app-' part with ${PROJECT_NAME}_${TAG_NAME}_
     for f in "${APK_FILES[@]}"; do
-        STRING=${PROJECT_NAME}_${VERSION_NUMBER}_
+        STRING=${PROJECT_NAME}_${TAG_NAME}_
         rename 's/app-/'"$STRING"'/' "$f"
     done
     # Replace the - with _ in the changed file names
@@ -61,20 +62,20 @@ if [ -f "${APK_FILES[0]}" ]; then
         echo "$file"
     done
 
-    if hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/**_release.apk -m "" v${VERSION_NUMBER}; then
+    if hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/**_release.apk -m "" ${TAG_NAME}; then
         echo added APK release
     else
         # if the release doesn't exist then create it
         echo created APK release
-        hub release create -a ./${APP_FOLDER}/build/outputs/apk/release/**_release.apk -m "v${VERSION_NUMBER}" v${VERSION_NUMBER}
+        hub release create -a ./${APP_FOLDER}/build/outputs/apk/release/**_release.apk -m "${TAG_NAME}" ${TAG_NAME}
     fi
 fi
 
 AAB_FILES=(./${APP_FOLDER}/build/outputs/bundle/release/**.aab)
 if [ -f "${AAB_FILES[0]}" ]; then
-    # Rename the 'app-' part with ${PROJECT_NAME}_${VERSION_NUMBER}_
+    # Rename the 'app-' part with ${PROJECT_NAME}_${TAG_NAME}_
     for f in "${AAB_FILES[@]}"; do
-        STRING=${PROJECT_NAME}_${VERSION_NUMBER}_
+        STRING=${PROJECT_NAME}_${TAG_NAME}_
         rename 's/app-/'"$STRING"'/' "$f"
     done
     # Replace the - with _ in the changed file names
@@ -82,10 +83,10 @@ if [ -f "${AAB_FILES[0]}" ]; then
     for f in "${CHANGED_AAB_FILES[@]}"; do
         rename 's/-/_/' "$f"
     done
-    if hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/release/**_release.aab -m "" v${VERSION_NUMBER}; then 
+    if hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/release/**_release.aab -m "" ${TAG_NAME}; then 
         echo added AAB release
     else
         echo created AAB release
-        hub release create -a ./${APP_FOLDER}/build/outputs/bundle/release/**_release.aab -m "v${VERSION_NUMBER}" v${VERSION_NUMBER}
+        hub release create -a ./${APP_FOLDER}/build/outputs/bundle/release/**_release.aab -m "${TAG_NAME}" ${TAG_NAME}
     fi
 fi
