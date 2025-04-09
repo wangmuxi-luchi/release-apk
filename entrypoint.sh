@@ -16,7 +16,8 @@ if [[ "$GITHUB_REF" == refs/tags/* ]]; then
     echo "当前引用是一个标签（tag）: $GITHUB_REF"
     TAG_NAME=${GITHUB_REF#refs/tags/}  # 提取标签名称
     echo "标签名称: $TAG_NAME"
-    VERSION_NUMBER=$TAG_NAME
+    # 使用正则表达式提取除了v以外的部分
+    VERSION_NUMBER=${TAG_NAME#v}
 else
     echo "当前引用不是一个标签（tag）: $GITHUB_REF"
     VERSION_NUMBER=$(grep -oP 'versionName.*?"\K(.*?)(?=")' ./${APP_FOLDER}/build.gradle.*)
