@@ -40,9 +40,12 @@ echo "项目名称 (applicationId): ${PROJECT_NAME}"
 echo "触发类型 (TRIGGER_TYPE): ${TRIGGER_TYPE}"
 
 SUFFIX=""
+RELEASE_TAG="${TAG_NAME}"
 if [[ "$TRIGGER_TYPE" == *"test"* ]]; then
     SUFFIX="_test"
+    RELEASE_TAG="${TAG_NAME}_test_$(date +%Y%m%d_%H%M%S)"
     echo "测试版本，添加测试后缀: ${SUFFIX}"
+    echo "测试版本使用独立 tag: ${RELEASE_TAG}"
 else
     echo "正式版本，使用正式命名"
 fi
@@ -68,12 +71,11 @@ if [ -f "${APK_FILES[0]}" ]; then
         echo "$file"
     done
 
-    if hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/**_release.apk -m "" ${TAG_NAME}; then
+    if hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/**_release.apk -m "" ${RELEASE_TAG}; then
         echo added APK release
     else
-        # if the release doesn't exist then create it
         echo created APK release
-        hub release create -a ./${APP_FOLDER}/build/outputs/apk/release/**_release.apk -m "${TAG_NAME}" ${TAG_NAME}
+        hub release create -a ./${APP_FOLDER}/build/outputs/apk/release/**_release.apk -m "${RELEASE_TAG}" ${RELEASE_TAG}
     fi
 fi
 
@@ -88,10 +90,10 @@ if [ -f "${AAB_FILES[0]}" ]; then
     for f in "${CHANGED_AAB_FILES[@]}"; do
         rename 's/-/_/' "$f"
     done
-    if hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/release/**_release.aab -m "" ${TAG_NAME}; then 
+    if hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/release/**_release.aab -m "" ${RELEASE_TAG}; then 
         echo added AAB release
     else
         echo created AAB release
-        hub release create -a ./${APP_FOLDER}/build/outputs/bundle/release/**_release.aab -m "${TAG_NAME}" ${TAG_NAME}
+        hub release create -a ./${APP_FOLDER}/build/outputs/bundle/release/**_release.aab -m "${RELEASE_TAG}" ${RELEASE_TAG}
     fi
 fi
