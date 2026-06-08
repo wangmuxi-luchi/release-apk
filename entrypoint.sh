@@ -40,11 +40,11 @@ echo "项目名称 (applicationId): ${PROJECT_NAME}"
 echo "触发类型 (TRIGGER_TYPE): ${TRIGGER_TYPE}"
 
 SUFFIX=""
-if [ "$TRIGGER_TYPE" = "workflow_dispatch" ]; then
+if [[ "$TRIGGER_TYPE" == *"test"* ]]; then
     SUFFIX="_test"
-    echo "手动触发，添加测试后缀: ${SUFFIX}"
+    echo "测试版本，添加测试后缀: ${SUFFIX}"
 else
-    echo "自动触发 (push tag)，使用正式版本命名"
+    echo "正式版本，使用正式命名"
 fi
 
 APK_FILES=(./${APP_FOLDER}/build/outputs/apk/release/**.apk)
