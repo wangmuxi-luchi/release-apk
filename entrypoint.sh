@@ -40,53 +40,51 @@ echo "项目名称 (applicationId): ${PROJECT_NAME}"
 
 # TAG_NAME=`grep -oP '"version": "\K(.*?)(?=")' ./package.json`
 # PROJECT_NAME=`grep -oP '"name": "\K(.*?)(?=")' ./package.json`
-APK_FILES=(./${APP_FOLDER}/build/outputs/apk/release/**.apk)
-for file in ./${APP_FOLDER}/build/outputs/apk/release/*; do
+BUILD_TYPE=${RELEASE_SUFFIX:-release}
+echo "Build type: ${BUILD_TYPE}"
+
+APK_FILES=(./${APP_FOLDER}/build/outputs/apk/${BUILD_TYPE}/**.apk)
+for file in ./${APP_FOLDER}/build/outputs/apk/${BUILD_TYPE}/*; do
     echo files before rename
     echo "$file"
 done
 if [ -f "${APK_FILES[0]}" ]; then
-    # Rename the 'app-' part with ${PROJECT_NAME}_${TAG_NAME}_
     for f in "${APK_FILES[@]}"; do
         STRING=${PROJECT_NAME}_${TAG_NAME}_
         rename 's/app-/'"$STRING"'/' "$f"
     done
-    # Replace the - with _ in the changed file names
-    CHANGED_APK_FILES=(./${APP_FOLDER}/build/outputs/apk/release/**.apk)
+    CHANGED_APK_FILES=(./${APP_FOLDER}/build/outputs/apk/${BUILD_TYPE}/**.apk)
     for f in "${CHANGED_APK_FILES[@]}"; do
         rename 's/-/_/' "$f"
     done
 
-    for file in ./${APP_FOLDER}/build/outputs/apk/release/*; do
+    for file in ./${APP_FOLDER}/build/outputs/apk/${BUILD_TYPE}/*; do
         echo files after rename
         echo "$file"
     done
 
-    if hub release edit -a ./${APP_FOLDER}/build/outputs/apk/release/**_release.apk -m "" ${TAG_NAME}; then
-        echo added APK release
+    if hub release edit -a ./${APP_FOLDER}/build/outputs/apk/${BUILD_TYPE}/**_${BUILD_TYPE}.apk -m "" ${TAG_NAME}; then
+        echo added APK ${BUILD_TYPE}
     else
-        # if the release doesn't exist then create it
-        echo created APK release
-        hub release create -a ./${APP_FOLDER}/build/outputs/apk/release/**_release.apk -m "${TAG_NAME}" ${TAG_NAME}
+        echo created APK ${BUILD_TYPE}
+        hub release create -a ./${APP_FOLDER}/build/outputs/apk/${BUILD_TYPE}/**_${BUILD_TYPE}.apk -m "${TAG_NAME}" ${TAG_NAME}
     fi
 fi
 
-AAB_FILES=(./${APP_FOLDER}/build/outputs/bundle/release/**.aab)
+AAB_FILES=(./${APP_FOLDER}/build/outputs/bundle/${BUILD_TYPE}/**.aab)
 if [ -f "${AAB_FILES[0]}" ]; then
-    # Rename the 'app-' part with ${PROJECT_NAME}_${TAG_NAME}_
     for f in "${AAB_FILES[@]}"; do
         STRING=${PROJECT_NAME}_${TAG_NAME}_
         rename 's/app-/'"$STRING"'/' "$f"
     done
-    # Replace the - with _ in the changed file names
-    CHANGED_AAB_FILES=(./${APP_FOLDER}/build/outputs/bundle/release/**.aab)
+    CHANGED_AAB_FILES=(./${APP_FOLDER}/build/outputs/bundle/${BUILD_TYPE}/**.aab)
     for f in "${CHANGED_AAB_FILES[@]}"; do
         rename 's/-/_/' "$f"
     done
-    if hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/release/**_release.aab -m "" ${TAG_NAME}; then 
-        echo added AAB release
+    if hub release edit -a ./${APP_FOLDER}/build/outputs/bundle/${BUILD_TYPE}/**_${BUILD_TYPE}.aab -m "" ${TAG_NAME}; then 
+        echo added AAB ${BUILD_TYPE}
     else
-        echo created AAB release
-        hub release create -a ./${APP_FOLDER}/build/outputs/bundle/release/**_release.aab -m "${TAG_NAME}" ${TAG_NAME}
+        echo created AAB ${BUILD_TYPE}
+        hub release create -a ./${APP_FOLDER}/build/outputs/bundle/${BUILD_TYPE}/**_${BUILD_TYPE}.aab -m "${TAG_NAME}" ${TAG_NAME}
     fi
 fi
